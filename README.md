@@ -12,7 +12,7 @@ Você está atualmente na branch **`Exercicios`**. Esta é a branch dedicada exc
 
 ## 🛠️ Tecnologias e Recursos Praticados (Django Ecosystem)
 
-O foco deste repositório é aprender aplicação real do framework em cenários de mercado. Os exercícios o geral e cobrem:
+O foco deste repositório é aprender aplicação real do framework em cenários de mercado. Os exercícios são o geral e tambêm cobrem:
 
 * **Django Core:** Estruturação de projetos e aplicativos (`apps`), configuração de ambientes e gerenciamento de arquivos estáticos/mídia.
 * **MVT Architecture:** Criação de `Models` complexos, construção de `Views` (Function-Based e Class-Based Views) e renderização dinâmica com o sistema de `Templates` do Django.
