@@ -27,6 +27,7 @@ O foco deste repositório é aprender aplicação real do framework em cenários
 
 Para facilitar a navegação e o aprendizado, o conteúdo está organizado de forma cronológica. Cada dia de aula possui sua própria pasta dedicada, contendo os respectivos arquivos de código e enunciados dos exercícios:
 
+```text
 📂 seu-repositorio (Branch: Exercicios)
  ├── 📂 Dia-01/
  │    └── ...
