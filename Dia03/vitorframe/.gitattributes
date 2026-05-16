@@ -1,0 +1,33 @@
+# Força o Git a detectar automaticamente se o arquivo é texto
+* text=auto
+
+# Garante que arquivos de código usem LF (padrão Unix) ao serem commitados
+# Isso evita o erro comum de "mistura de CRLF e LF" em builds de CI/CD
+*.py      text eol=lf
+*.pyi     text eol=lf
+*.ipynb   text eol=lf
+*.sql     text eol=lf
+*.toml    text eol=lf
+*.yaml    text eol=lf
+*.yml     text eol=lf
+*.json    text eol=lf
+*.md      text eol=lf
+*.txt     text eol=lf
+
+# Garante que arquivos binários não sofram conversão de texto
+*.jpg      binary
+*.png      binary
+*.gif      binary
+*.pdf      binary
+*.pyc      binary
+*.pyo      binary
+*.db       binary
+*.sqlite   binary
+
+# Impede que arquivos de configuração do Git ou CI apareçam em "git archive"
+.gitignore      export-ignore
+.gitattributes  export-ignore
+.github/        export-ignore
+
+# Jupyter Notebooks: trata como texto, mas você pode usar ferramentas de diff específicas
+*.ipynb  text
