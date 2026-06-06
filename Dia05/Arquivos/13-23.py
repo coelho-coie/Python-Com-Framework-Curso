@@ -1,6 +1,6 @@
 import os
 
-pasta_principal = "Dia05/projeto"
+pasta_principal = "projeto"
 subpastas = ["dados", "imagens"]
 
 # Cria a pasta principal

@@ -1,6 +1,6 @@
 import os
 
-pasta_para_limpar = "Dia05/lixeira"
+pasta_para_limpar = "lixeira"
 
 # Crie a pasta 'lixeira' com alguns arquivos para testar.
 if os.path.exists(pasta_para_limpar):
