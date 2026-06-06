@@ -3,7 +3,7 @@ import shutil
 from datetime import datetime
 
 arquivo_original = "dados.csv" # Crie este arquivo para teste
-pasta_backup = "Dia05/backups"
+pasta_backup = "backups"
 
 if not os.path.exists(pasta_backup):
     os.mkdir(pasta_backup)

@@ -1,8 +1,8 @@
 import os
 import shutil
 
-pasta_origem = "Dia05/origem"
-pasta_destino = "Dia05/destino"
+pasta_origem = "origem"
+pasta_destino = "destino"
 
 # Garante que as pastas existem
 os.makedirs(pasta_origem, exist_ok=True)
