@@ -35,10 +35,12 @@ Ative o ambiente virtual:
 * Windows: `.venv\Scripts\activate`
 * Linux/Mac: `source .venv/bin/activate`
 
-Instale o Django:
+Instale o Requirements:
 ```bash
-pip install django
-
+pip install -r requirements.txt
+```
+E depois:
+```bash
 python manage.py runserver
 ```
 
