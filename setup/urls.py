@@ -25,6 +25,7 @@ urlpatterns = [
     path('', home, name='home'),
     path('clientes/', include('clientes.urls')),
     path('pedidos/', include('pedidos.urls')),
+    path('pagamentos/', include('pagamentos.urls')),
     path('', include('produtos.urls')),
     # Rota para autenticação (Login, Logout, Password Reset)
     path('accounts/', include('django.contrib.auth.urls')), 

@@ -1,70 +1,121 @@
 {% extends 'base.html' %}
+{% load static %}
 
-{% block title %}Cadastro de Cliente - Cantina Digital{% endblock %}
+{% block title %}Cadastro - Sistema Escolar{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-6">
-        <div class="card shadow border-0">
-            <div class="card-header bg-primary text-white py-3">
-                <h4 class="card-title mb-0"><i class="bi bi-person-plus"></i> Novo Cadastro de Cliente</h4>
-            </div>
-            <div class="card-body p-4">
-                <form method="POST" id="formCadastro">
-                    {% csrf_token %}
-                    
-                    <div class="mb-3">
-                        <label for="nome" class="form-label fw-bold">Nome Completo</label>
-                        <input type="text" class="form-control" id="nome" name="nome" placeholder="Digite o nome completo" required>
+<div class="container py-5 mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8">
+            <div class="card card-glass border-0 overflow-hidden" data-aos="zoom-in" data-aos-duration="800">
+                
+                <!-- HEADER -->
+                <div class="bg-dark text-white p-4 text-center position-relative" style="background: linear-gradient(135deg, #1f1c2c, #928dab);">
+                    <div class="position-absolute top-0 start-0 w-100 h-100 shimmer" style="opacity: 0.1;"></div>
+                    <div class="d-inline-flex align-items-center justify-content-center rounded-circle bg-accent glow-accent floating mb-3" style="width: 70px; height: 70px;">
+                        <i class="bi bi-person-plus-fill fs-2 text-dark"></i>
                     </div>
+                    <h2 class="font-heading fw-bold mb-0">Criar Sua Conta</h2>
+                    <p class="text-white-50 mt-2 mb-0">Junte-se a nós para a melhor experiência</p>
+                </div>
 
-                    <div class="mb-3">
-                        <label for="cpf" class="form-label fw-bold">CPF</label>
-                        <input type="text" class="form-control" id="cpf" name="cpf" placeholder="000.000.000-00" required>
-                        <div class="form-text">Somente números, a formatação é automática.</div>
-                    </div>
+                <div class="card-body p-4 p-md-5">
+                    <form method="post" action="">
+                        {% csrf_token %}
+                        
+                        <!-- Nome Completo -->
+                        <div class="mb-4" data-aos="fade-up" data-aos-delay="100">
+                            <label class="form-label text-muted fw-bold small text-uppercase">Nome Completo</label>
+                            <div class="input-group input-group-lg">
+                                <span class="input-group-text bg-transparent border-end-0 border-accent-focus">
+                                    <i class="bi bi-person text-accent"></i>
+                                </span>
+                                <input type="text" name="nome" class="form-control bg-transparent border-start-0 border-accent-focus" placeholder="Nome completo" required>
+                            </div>
+                        </div>
 
-                    <div class="mb-3">
-                        <label for="email" class="form-label fw-bold">E-mail</label>
-                        <input type="email" class="form-control" id="email" name="email" placeholder="exemplo@email.com" required>
-                    </div>
+                        <!-- CPF -->
+                        <div class="mb-4" data-aos="fade-up" data-aos-delay="200">
+                            <label class="form-label text-muted fw-bold small text-uppercase">CPF</label>
+                            <div class="input-group input-group-lg">
+                                <span class="input-group-text bg-transparent border-end-0 border-accent-focus">
+                                    <i class="bi bi-card-text text-accent"></i>
+                                </span>
+                                <input type="text" name="cpf" id="cpf" class="form-control bg-transparent border-start-0 border-accent-focus" placeholder="000.000.000-00" required>
+                            </div>
+                        </div>
 
-                    <!-- NOVO CAMPO DE SENHA -->
-                    <div class="mb-3">
-                        <label for="password" class="form-label fw-bold">Senha de Acesso</label>
-                        <input type="password" class="form-control" id="password" name="password" placeholder="Crie uma senha segura" required>
-                        <div class="form-text">Esta senha será usada para acessar sua conta.</div>
-                    </div>
+                        <!-- Email -->
+                        <div class="mb-4" data-aos="fade-up" data-aos-delay="300">
+                            <label class="form-label text-muted fw-bold small text-uppercase">E-mail</label>
+                            <div class="input-group input-group-lg">
+                                <span class="input-group-text bg-transparent border-end-0 border-accent-focus">
+                                    <i class="bi bi-envelope text-accent"></i>
+                                </span>
+                                <input type="email" name="email" class="form-control bg-transparent border-start-0 border-accent-focus" placeholder="seu.email@exemplo.com" required>
+                            </div>
+                        </div>
+                        
+                        <!-- Telefone -->
+                        <div class="mb-4" data-aos="fade-up" data-aos-delay="400">
+                            <label class="form-label text-muted fw-bold small text-uppercase">Telefone / WhatsApp</label>
+                            <div class="input-group input-group-lg">
+                                <span class="input-group-text bg-transparent border-end-0 border-accent-focus">
+                                    <i class="bi bi-whatsapp text-accent"></i>
+                                </span>
+                                <input type="text" name="telefone" id="telefone" class="form-control bg-transparent border-start-0 border-accent-focus" placeholder="(00) 00000-0000">
+                            </div>
+                        </div>
 
-                    <div class="mb-3">
-                        <label for="telefone" class="form-label fw-bold">Telefone / WhatsApp</label>
-                        <input type="text" class="form-control" id="telefone" name="telefone" placeholder="(00) 00000-0000">
-                    </div>
+                        <!-- Senha -->
+                        <div class="mb-5" data-aos="fade-up" data-aos-delay="500">
+                            <label class="form-label text-muted fw-bold small text-uppercase">Senha</label>
+                            <div class="input-group input-group-lg">
+                                <span class="input-group-text bg-transparent border-end-0 border-accent-focus">
+                                    <i class="bi bi-lock text-accent"></i>
+                                </span>
+                                <input type="password" name="password" id="password" class="form-control bg-transparent border-start-0 border-accent-focus" placeholder="Crie uma senha forte" required>
+                            </div>
+                        </div>
 
-                    <div class="d-grid gap-2 mt-4">
-                        <button type="submit" class="btn btn-success btn-lg">
-                            <i class="bi bi-check-circle"></i> Finalizar Cadastro
-                        </button>
-                        <a href="/" class="btn btn-outline-secondary">Cancelar e Voltar</a>
-                    </div>
-                </form>
+                        <!-- Botão Submit -->
+                        <div class="d-grid gap-2 mb-4" data-aos="fade-up" data-aos-delay="600">
+                            <button type="submit" class="btn btn-accent btn-lg w-100 rounded-pill glow-accent fw-bold text-uppercase" style="letter-spacing: 1px;">
+                                Concluir Cadastro
+                            </button>
+                        </div>
+
+                        <!-- Link Login -->
+                        <div class="text-center mt-4" data-aos="fade-up" data-aos-delay="700">
+                            <p class="text-muted mb-0">Já tem uma conta? 
+                                <a href="{% url 'login' %}" class="text-accent fw-bold text-decoration-none">Faça login aqui</a>
+                            </p>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
 </div>
+{% endblock %}
 
+{% block scripts %}
 <script src="https://unpkg.com/imask"></script>
 <script>
-    const elementCpf = document.getElementById('cpf');
-    const maskOptionsCpf = {
-        mask: '000.000.000-00'
-    };
-    IMask(elementCpf, maskOptionsCpf);
-
-    const elementTel = document.getElementById('telefone');
-    const maskOptionsTel = {
-        mask: '(00) 00000-0000'
-    };
-    IMask(elementTel, maskOptionsTel);
+    document.addEventListener("DOMContentLoaded", function() {
+        var cpfInput = document.getElementById('cpf');
+        if (cpfInput) {
+            IMask(cpfInput, {
+                mask: '000.000.000-00'
+            });
+        }
+        
+        var telInput = document.getElementById('telefone');
+        if (telInput) {
+            IMask(telInput, {
+                mask: '(00) 00000-0000'
+            });
+        }
+    });
 </script>
 {% endblock %}

@@ -53,27 +53,41 @@ def finalizar_compra(request):
     cliente_perfil = Cliente.objects.filter(usuario=request.user).first()
     
     if not cliente_perfil:
-        # Se o usuário não tiver perfil, usa o primeiro como fallback para evitar erro de banco
+        # Se não houver cliente vinculado ao usuário, busca o primeiro cadastrado
         cliente_perfil = Cliente.objects.first()
+        
+    if not cliente_perfil:
+        # Se ainda assim não houver nenhum cliente no banco, cria um automaticamente para o usuário
+        try:
+            cpf_gerado = f"{request.user.id:011d}"
+            cliente_perfil = Cliente.objects.create(
+                usuario=request.user,
+                nome=request.user.get_full_name() or request.user.username,
+                email=request.user.email or "aluno@cantina.edu.br",
+                cpf=cpf_gerado
+            )
+        except Exception:
+            cliente_perfil = None
 
-    # Cria o pedido atrelando ao User logado
+    # Cria o pedido atrelando ao User logado (com cliente_perfil como opcional)
     pedido = Pedido.objects.create(
         usuario=request.user, 
         cliente=cliente_perfil, 
         pago=False
     )
     
-    for produto_id in carrinho.keys():
+    for produto_id, quantidade in carrinho.items():
         try:
             produto = Produto.objects.get(id=produto_id)
-            pedido.produtos.add(produto)
+            for _ in range(quantidade):
+                pedido.produtos.add(produto)
         except Produto.DoesNotExist:
             continue
     
     request.session['carrinho'] = {}
     request.session.modified = True
-    messages.success(request, "Pedido realizado com sucesso!")
-    return redirect('lista_pedidos')
+    messages.info(request, "Pedido gerado com sucesso! Escolha a forma de pagamento abaixo.")
+    return redirect('checkout_pagamento', pedido_id=pedido.id)
 
 @login_required
 def lista_pedidos(request):

@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-
+SECRET_KEY = os.environ.get("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -36,8 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'clientes', 
-    'produtos', 
+    'produtos',
+    'clientes',
     'pedidos',
     'pagamentos',
 ]
@@ -57,7 +58,7 @@ ROOT_URLCONF = 'setup.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -105,19 +106,34 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
 
-# Mude o idioma para Português do Brasil
 LANGUAGE_CODE = 'pt-br'
 
-# Mude o fuso horário para o nosso
 TIME_ZONE = 'America/Sao_Paulo'
 
-# Ative a internacionalização e a formatação localizada
 USE_I18N = True
-USE_L10N = True  # Garante que o Django use formatos locais de números e datas
-USE_TZ = True
 
+USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+# URL para acessar os arquivos no navegador
+MEDIA_URL = '/media/'
+
+# Caminho físico na pasta do seu projeto
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
+
+# Adicione ao final do arquivo setup/settings.py
+LOGIN_URL = '/accounts/login/' 
+
+# Onde o usuário cai após fazer login
+LOGIN_REDIRECT_URL = 'home'
+
+# Onde o usuário cai após fazer logoff
+LOGOUT_REDIRECT_URL = 'home'
