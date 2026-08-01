@@ -1,76 +1,186 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Início - Cantina Digital{% endblock %}
+{% block title %}Cantina Digital - Início{% endblock %}
 
 {% block content %}
-<div class="text-center mb-5">
-    <h1 class="display-4 fw-bold">Bem-vindo à nossa Cantina!</h1>
-    <p class="lead text-muted">Escolha seus salgados e monte seu pedido no carrinho.</p>
-</div>
+<!-- Hero Section -->
+<section class="hero-section position-relative overflow-hidden pt-5 pb-5 mb-5" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); min-height: 80vh; display: flex; align-items: center; border-bottom-left-radius: 40px; border-bottom-right-radius: 40px;">
+    <!-- Decorative floating elements -->
+    <div class="floating position-absolute" style="top: 10%; left: 5%; opacity: 0.3; font-size: 3rem; color: var(--bs-warning);">🍔</div>
+    <div class="floating position-absolute" style="top: 20%; right: 10%; opacity: 0.2; font-size: 4rem; animation-delay: 1s;">🍕</div>
+    <div class="floating position-absolute" style="bottom: 15%; left: 15%; opacity: 0.4; font-size: 2.5rem; animation-delay: 2s;">🥤</div>
+    <div class="floating position-absolute" style="bottom: 25%; right: 5%; opacity: 0.3; font-size: 3.5rem; animation-delay: 1.5s;">🍰</div>
+    
+    <div class="container position-relative z-1">
+        <div class="row align-items-center">
+            <div class="col-lg-7 text-center text-lg-start" data-aos="fade-up" data-aos-duration="1000">
+                <span class="badge bg-warning text-dark mb-3 px-3 py-2 rounded-pill fw-bold text-uppercase shadow-sm">
+                    <i class="bi bi-star-fill me-1"></i> A Melhor da Escola
+                </span>
+                <h1 class="font-heading display-3 fw-bolder mb-4 text-white">
+                    Fome na hora do intervalo?<br>
+                    <span class="gradient-text">A Cantina Digital</span> resolve!
+                </h1>
+                <p class="lead text-light opacity-75 mb-5 fw-light" style="font-size: 1.25rem;">
+                    Peça seus lanches favoritos pelo celular. Sem filas, sem estresse. Só sabor e rapidez.
+                </p>
+                <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center justify-content-lg-start mb-5">
+                    <a href="{% url 'cardapio' %}" class="btn btn-accent btn-lg px-5 py-3 rounded-pill fw-bold glow-accent d-flex align-items-center justify-content-center">
+                        <i class="bi bi-cart3 me-2 fs-5"></i> Ver Cardápio
+                    </a>
+                    <a href="{% url 'lista_pedidos' %}" class="btn btn-dark-custom btn-lg px-5 py-3 rounded-pill fw-bold d-flex align-items-center justify-content-center" style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); color: white;">
+                        <i class="bi bi-receipt me-2 fs-5"></i> Meus Pedidos
+                    </a>
+                </div>
+                
+                <!-- Stats -->
+                <div class="row g-4 text-center text-lg-start" data-aos="fade-up" data-aos-delay="200">
+                    <div class="col-4">
+                        <h2 class="fw-bolder text-white mb-0 display-6">100<span class="text-warning">+</span></h2>
+                        <p class="text-light opacity-50 small mb-0 text-uppercase tracking-wide">Produtos</p>
+                    </div>
+                    <div class="col-4">
+                        <h2 class="fw-bolder text-white mb-0 display-6">5<span class="text-warning">min</span></h2>
+                        <p class="text-light opacity-50 small mb-0 text-uppercase tracking-wide">Retirada</p>
+                    </div>
+                    <div class="col-4">
+                        <h2 class="fw-bolder text-white mb-0 display-6">4.9<span class="text-warning"><i class="bi bi-star-fill fs-5 pb-1"></i></span></h2>
+                        <p class="text-light opacity-50 small mb-0 text-uppercase tracking-wide">Avaliação</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-5 d-none d-lg-block position-relative" data-aos="zoom-in" data-aos-delay="300" data-aos-duration="1200">
+                <div class="position-absolute top-50 start-50 translate-middle w-100 h-100 rounded-circle shimmer" style="background: radial-gradient(circle, rgba(234,179,8,0.2) 0%, rgba(0,0,0,0) 70%); z-index: -1;"></div>
+                <img src="{% static 'img/hero-burger.png' %}" alt="Lanche Delicioso" class="img-fluid floating" style="filter: drop-shadow(0 20px 30px rgba(0,0,0,0.5));" onerror="this.src='https://images.unsplash.com/photo-1550547660-d9450f859349?q=80&w=600&auto=format&fit=crop'; this.style.borderRadius='30px';">
+            </div>
+        </div>
+    </div>
+</section>
 
-<!-- Carrossel de Destaques -->
-<div id="carouselSalgados" class="carousel slide shadow-lg rounded overflow-hidden mb-5" data-bs-ride="carousel">
-    <div class="carousel-inner">
+<!-- Destaques Carousel Section -->
+{% if salgados %}
+<section class="container mb-5" data-aos="fade-up">
+    <div class="d-flex justify-content-between align-items-end mb-4">
+        <div>
+            <h5 class="text-warning fw-bold mb-1"><i class="bi bi-fire me-1"></i> Mais Vendidos</h5>
+            <h2 class="font-heading fw-bold mb-0">Destaques da Cantina</h2>
+        </div>
+    </div>
+    
+    <div id="carouselSalgados" class="carousel slide rounded-4 overflow-hidden shadow-lg" data-bs-ride="carousel">
+        <div class="carousel-indicators mb-2">
+            {% for salgado in salgados|slice:":5" %}
+                <button type="button" data-bs-target="#carouselSalgados" data-bs-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active"{% endif %} aria-current="true" aria-label="Slide {{ forloop.counter }}"></button>
+            {% endfor %}
+        </div>
+        
+        <div class="carousel-inner" style="height: min(440px, 60vw);">
+            {% for salgado in salgados|slice:":5" %}
+            <div class="carousel-item h-100 {% if forloop.first %}active{% endif %}">
+                {% if salgado.imagem %}
+                    <img src="{{ salgado.imagem.url }}" class="d-block w-100 h-100 object-fit-cover" alt="{{ salgado.nome }}">
+                {% else %}
+                    <div class="d-flex align-items-center justify-content-center w-100 h-100 bg-secondary">
+                        <i class="bi bi-image text-white opacity-25" style="font-size: 5rem;"></i>
+                    </div>
+                {% endif %}
+                
+                <div class="carousel-caption d-flex flex-column justify-content-end text-start p-4 p-md-5 w-100 start-0 bottom-0" style="background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.5) 50%, transparent 100%); right: 0;">
+                    <div class="badge bg-warning text-dark mb-2 align-self-start fs-6 fw-bold">R$ {{ salgado.preco|floatformat:2 }}</div>
+                    <h3 class="font-heading fw-bold text-white mb-2 fs-2">{{ salgado.nome }}</h3>
+                    <p class="text-light opacity-75 d-none d-md-block mb-4" style="max-width: 600px;">{{ salgado.descricao|truncatewords:15 }}</p>
+                    
+                    <a href="{% url 'adicionar_ao_carrinho' salgado.id %}" class="btn btn-accent rounded-pill px-4 py-2 fw-bold align-self-start glow-accent">
+                        <i class="bi bi-plus-circle me-1"></i> Adicionar
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselSalgados" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon p-3 rounded-circle bg-dark bg-opacity-50" aria-hidden="true"></span>
+            <span class="visually-hidden">Anterior</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselSalgados" data-bs-slide="next">
+            <span class="carousel-control-next-icon p-3 rounded-circle bg-dark bg-opacity-50" aria-hidden="true"></span>
+            <span class="visually-hidden">Próximo</span>
+        </button>
+    </div>
+</section>
+{% endif %}
+
+<!-- Product Grid Section -->
+<section class="container mb-5 pb-5">
+    <div class="text-center mb-5" data-aos="fade-up">
+        <h5 class="text-warning fw-bold mb-1">Nosso Cardápio</h5>
+        <h2 class="font-heading fw-bold mb-0">Explore Nossas Delícias</h2>
+    </div>
+
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4">
         {% for salgado in salgados %}
-        <div class="carousel-item {% if forloop.first %}active{% endif %}">
-            {% if salgado.imagem %}
-                <img src="{{ salgado.imagem.url }}" class="d-block w-100" style="height: 500px; object-fit: cover;" alt="{{ salgado.nome }}">
-            {% endif %}
-            <div class="carousel-caption d-none d-md-block" style="background: rgba(0,0,0,0.6); border-radius: 15px; padding: 20px;">
-                <h5>{{ salgado.nome }}</h5>
-                <p class="fs-4">R$ {{ salgado.preco|floatformat:2 }}</p>
-                <!-- Botão que alimenta o Buffer (Sessão/Carrinho) -->
-                <a href="{% url 'adicionar_ao_carrinho' salgado.id %}" class="btn btn-success btn-lg">
-                    <i class="bi bi-cart-plus"></i> Adicionar ao Carrinho
-                </a>
+        <div class="col" data-aos="fade-up" data-aos-delay="{% widthratio forloop.counter0 1 100 %}">
+            <div class="card h-100 card-glass border-0 shadow-sm rounded-4 overflow-hidden position-relative transition-all" style="transition: transform 0.3s ease, box-shadow 0.3s ease;" onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 15px 30px rgba(0,0,0,0.1)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 .125rem .25rem rgba(0,0,0,.075)';">
+                
+                <!-- Status Badge -->
+                {% if not salgado.disponivel %}
+                <div class="position-absolute top-0 start-0 w-100 h-100 bg-white bg-opacity-50 z-2 d-flex align-items-center justify-content-center" style="backdrop-filter: blur(2px);">
+                    <span class="badge bg-danger fs-5 px-4 py-2 rounded-pill shadow">Esgotado</span>
+                </div>
+                {% endif %}
+
+                <!-- Image Container -->
+                <div class="img-zoom-container overflow-hidden position-relative" style="height: 200px; background-color: #f8f9fa;">
+                    {% if salgado.imagem %}
+                        <img src="{{ salgado.imagem.url }}" class="w-100 h-100 object-fit-cover transition-all" alt="{{ salgado.nome }}" style="transition: transform 0.5s ease;" onmouseover="this.style.transform='scale(1.1)';" onmouseout="this.style.transform='scale(1)';">
+                    {% else %}
+                        <div class="d-flex h-100 align-items-center justify-content-center text-muted bg-light">
+                            <i class="bi bi-box-seam display-1 opacity-25"></i>
+                        </div>
+                    {% endif %}
+                    
+                    <div class="position-absolute top-0 end-0 m-3 z-1">
+                        <span class="badge bg-white text-dark shadow-sm px-3 py-2 rounded-pill fw-bold border" style="font-size: 1.1rem;">
+                            R$ {{ salgado.preco|floatformat:2 }}
+                        </span>
+                    </div>
+                </div>
+                
+                <!-- Card Body -->
+                <div class="card-body p-4 d-flex flex-column">
+                    <h4 class="card-title font-heading fw-bold mb-2">{{ salgado.nome }}</h4>
+                    <p class="card-text text-muted small flex-grow-1 mb-4">{{ salgado.descricao|truncatewords:20 }}</p>
+                    
+                    <div class="d-flex justify-content-between align-items-center mt-auto">
+                        <div class="text-danger fw-bolder fs-4 mb-0">R$ {{ salgado.preco|floatformat:2 }}</div>
+                        <a href="{% url 'adicionar_ao_carrinho' salgado.id %}" class="btn btn-accent rounded-circle p-0 shadow-sm d-flex align-items-center justify-content-center glow-accent {% if not salgado.disponivel %}disabled{% endif %}" style="width: 45px; height: 45px;" aria-label="Comprar">
+                            <i class="bi bi-cart-plus fs-5"></i>
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
         {% empty %}
-        <div class="carousel-item active">
-            <div class="d-flex align-items-center justify-content-center" style="height: 400px; background: #eee;">
-                <p>Nenhum salgado disponível no momento.</p>
+        <div class="col-12 text-center py-5" data-aos="zoom-in">
+            <div class="bg-light rounded-4 p-5 mx-auto card-glass border-0" style="max-width: 500px;">
+                <i class="bi bi-emoji-frown display-1 text-muted mb-4 opacity-50"></i>
+                <h3 class="font-heading fw-bold mb-3">Nenhum produto encontrado</h3>
+                <p class="text-muted mb-4">Ainda não temos produtos cadastrados ou disponíveis no momento. Volte mais tarde!</p>
+                <a href="{% url 'home' %}" class="btn btn-outline-secondary rounded-pill px-4">Recarregar Página</a>
             </div>
         </div>
         {% endfor %}
     </div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#carouselSalgados" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#carouselSalgados" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-    </button>
-</div>
-
-<!-- Cardápio Completo (Grade de Produtos) -->
-<div class="row row-cols-1 row-cols-md-3 g-4 mb-5">
-    {% for salgado in salgados %}
-    <div class="col">
-        <div class="card h-100 shadow-sm border-0">
-            {% if salgado.imagem %}
-                <img src="{{ salgado.imagem.url }}" class="card-img-top" alt="{{ salgado.nome }}" style="height: 200px; object-fit: cover;">
-            {% endif %}
-            <div class="card-body text-center">
-                <h5 class="card-title fw-bold">{{ salgado.nome }}</h5>
-                <p class="card-text text-success fs-5 fw-bold">R$ {{ salgado.preco|floatformat:2 }}</p>
-                <p class="text-muted small">{{ salgado.descricao|truncatechars:60 }}</p>
-            </div>
-            <div class="card-footer bg-transparent border-0 pb-3">
-                <div class="d-grid">
-                    <!-- Link para o Carrinho (Garante o fluxo de conferência) -->
-                    <a href="{% url 'adicionar_ao_carrinho' salgado.id %}" class="btn btn-outline-primary">
-                        <i class="bi bi-plus-lg"></i> Colocar no Carrinho
-                    </a>
-                </div>
-            </div>
-        </div>
+    
+    {% if salgados %}
+    <div class="text-center mt-5" data-aos="fade-up">
+        <a href="{% url 'cardapio' %}" class="btn btn-outline-dark rounded-pill px-5 py-3 fw-bold">
+            Ver Todo o Cardápio <i class="bi bi-arrow-right ms-2"></i>
+        </a>
     </div>
-    {% endfor %}
-</div>
-
-<div class="text-center py-4 bg-white rounded shadow-sm">
-    <p class="mb-0 text-muted">Deseja um atendimento personalizado?</p>
-    <a href="/clientes/novo/" class="btn btn-link text-decoration-none">Clique aqui para atualizar seu cadastro.</a>
-</div>
+    {% endif %}
+</section>
 
 {% endblock %}

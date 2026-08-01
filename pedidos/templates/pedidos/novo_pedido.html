@@ -1,67 +1,153 @@
 {% extends 'base.html' %}
+{% load static %}
 
-{% block title %}Novo Pedido - Cantina Digital{% endblock %}
+{% block title %}Registrar Pedido | Cantina{% endblock %}
 
 {% block content %}
-<div class="container">
+<div class="container py-5">
     <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow border-0">
-                <div class="card-header bg-primary text-white py-3">
-                    <h4 class="mb-0"><i class="bi bi-plus-circle"></i> Registrar Venda (Balcão)</h4>
+        <div class="col-lg-8 col-md-10">
+            <div class="card card-glass border-0 shadow-lg floating" data-aos="fade-up" data-aos-duration="1000">
+                
+                <!-- HEADER -->
+                <div class="card-header bg-gradient bg-dark text-white p-4 position-relative overflow-hidden rounded-top" style="background: linear-gradient(135deg, #212529 0%, #343a40 100%);">
+                    <div class="d-flex justify-content-between align-items-center position-relative z-index-1">
+                        <div>
+                            <span class="badge bg-accent text-white mb-2 py-2 px-3 rounded-pill shimmer" style="letter-spacing: 1px; font-weight: 600; font-size: 0.8rem;">
+                                <i class="bi bi-tag-fill me-1"></i> VENDA DIRETA / BALCÃO
+                            </span>
+                            <h2 class="font-heading mb-0 text-white glow-accent">
+                                <i class="bi bi-plus-circle-fill text-accent me-2"></i>Registrar Pedido
+                            </h2>
+                        </div>
+                        <div class="d-none d-sm-block opacity-25">
+                            <i class="bi bi-cart-plus-fill" style="font-size: 4rem;"></i>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-body p-4">
-                    <form action="{% url 'adicionar_via_post' %}" method="POST">
+
+                <!-- BODY -->
+                <div class="card-body p-4 p-md-5">
+                    <form action="{% url 'adicionar_via_post' %}" method="POST" class="needs-validation" novalidate>
                         {% csrf_token %}
 
-                        <!-- Cliente: Controle de Permissão -->
-                        <div class="mb-3">
-                            <label for="cliente" class="form-label fw-bold">Cliente</label>
+                        <!-- Cliente Field -->
+                        <div class="mb-4" data-aos="fade-up" data-aos-delay="100">
+                            <label class="form-label fw-bold text-muted small text-uppercase">
+                                <i class="bi bi-person-fill me-1"></i> Cliente
+                            </label>
                             
-                            {# Verifica se o usuário pertence ao grupo de gestão #}
-                            {% if request.user.groups.all.0.name == 'Admins' or request.user.groups.all.0.name == 'Funcionarios' %}
-                                <select name="cliente" id="cliente" class="form-select" required>
-                                    <option value="" disabled selected>Selecione um cliente...</option>
-                                    {% for cliente in clientes %}
-                                        <option value="{{ cliente.id }}">{{ cliente.nome }}</option>
-                                    {% endfor %}
-                                </select>
+                            {% if request.user.groups.all.0.name == 'Admins' or request.user.groups.all.0.name == 'Funcionarios' or user.is_staff or user.is_superuser %}
+                                <div class="input-group input-group-lg shadow-sm">
+                                    <span class="input-group-text bg-light border-0"><i class="bi bi-search text-muted"></i></span>
+                                    <select name="cliente" class="form-select border-0 bg-light" required>
+                                        <option value="" disabled selected>Selecione um cliente...</option>
+                                        {% for cliente in clientes %}
+                                            <option value="{{ cliente.id }}">{{ cliente.nome|default:cliente.username }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
                             {% else %}
-                                {# Para clientes comuns, o campo fica travado no próprio nome #}
-                                <input type="text" class="form-control" value="{{ user.first_name|default:user.username }}" readonly>
-                                <input type="hidden" name="cliente" value="{{ user.id }}">
+                                <div class="input-group input-group-lg shadow-sm">
+                                    <span class="input-group-text bg-light border-0"><i class="bi bi-person-check-fill text-success"></i></span>
+                                    <input type="text" class="form-control border-0 bg-light fw-bold" value="{{ request.user.get_full_name|default:request.user.username }}" readonly>
+                                    <input type="hidden" name="cliente" value="{{ request.user.id }}">
+                                </div>
                             {% endif %}
                         </div>
 
-                        <div class="row">
-                            <!-- Produto -->
-                            <div class="col-md-8 mb-3">
-                                <label for="produto" class="form-label fw-bold">Produto (Salgado)</label>
-                                <select name="produto" id="produto" class="form-select" required>
-                                    <option value="" disabled selected>Selecione um produto...</option>
-                                    {% for produto in produtos %}
-                                        <option value="{{ produto.id }}">{{ produto.nome }} - R$ {{ produto.preco|floatformat:2 }}</option>
-                                    {% endfor %}
-                                </select>
+                        <div class="row g-4 mb-5">
+                            <!-- Produto Field -->
+                            <div class="col-md-8" data-aos="fade-up" data-aos-delay="200">
+                                <label class="form-label fw-bold text-muted small text-uppercase">
+                                    <i class="bi bi-box-seam me-1"></i> Produto
+                                </label>
+                                <div class="input-group input-group-lg shadow-sm">
+                                    <span class="input-group-text bg-light border-0"><i class="bi bi-cup-hot text-muted"></i></span>
+                                    <select name="produto" class="form-select border-0 bg-light" required>
+                                        <option value="" disabled selected>Escolha o produto...</option>
+                                        {% for produto in produtos %}
+                                            <option value="{{ produto.id }}">{{ produto.nome }} - R$ {{ produto.preco }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
                             </div>
 
-                            <!-- Quantidade -->
-                            <div class="col-md-4 mb-3">
-                                <label for="quantidade" class="form-label fw-bold">Quantidade</label>
-                                <input type="number" name="quantidade" id="quantidade" class="form-control" value="1" min="1" required>
+                            <!-- Quantidade Field -->
+                            <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
+                                <label class="form-label fw-bold text-muted small text-uppercase">
+                                    <i class="bi bi-123 me-1"></i> Qtd.
+                                </label>
+                                <div class="input-group input-group-lg shadow-sm">
+                                    <span class="input-group-text bg-light border-0"><i class="bi bi-hash text-muted"></i></span>
+                                    <input type="number" name="quantidade" class="form-control border-0 bg-light text-center fw-bold" value="1" min="1" required>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-3">
-                            <a href="{% url 'lista_pedidos' %}" class="btn btn-outline-secondary">Cancelar</a>
-                            <button type="submit" class="btn btn-success px-4">
-                                <i class="bi bi-cart-plus"></i> Adicionar ao Carrinho
+                        <hr class="text-muted opacity-25 mb-4">
+
+                        <!-- Actions -->
+                        <div class="d-flex flex-column flex-sm-row justify-content-end gap-3 mt-4" data-aos="fade-up" data-aos-delay="400">
+                            <a href="{% url 'lista_pedidos' %}" class="btn btn-outline-secondary btn-lg px-4 rounded-pill transition-all" style="min-width: 150px;">
+                                <i class="bi bi-x-lg me-2"></i>Cancelar
+                            </a>
+                            <button type="submit" class="btn btn-accent btn-lg px-5 rounded-pill shadow-sm transition-all text-white d-flex align-items-center justify-content-center shimmer" style="min-width: 250px;">
+                                <i class="bi bi-cart-plus-fill me-2 fs-5"></i>
+                                <span class="fw-bold">Adicionar ao Carrinho</span>
                             </button>
                         </div>
+
                     </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    .transition-all {
+        transition: all 0.3s ease;
+    }
+    .btn-outline-secondary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    .btn-accent:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(var(--bs-primary-rgb, 255,107,107), 0.4) !important;
+        filter: brightness(1.1);
+    }
+    .input-group:focus-within {
+        box-shadow: 0 0 0 0.25rem rgba(0,0,0, 0.1) !important;
+        transform: translateY(-2px);
+        transition: all 0.3s ease;
+    }
+    .input-group {
+        transition: all 0.3s ease;
+        border-radius: 0.5rem;
+        overflow: hidden;
+    }
+    select option {
+        padding: 10px;
+    }
+</style>
+
+<script>
+    // Form validation
+    (function () {
+        'use strict'
+        var forms = document.querySelectorAll('.needs-validation')
+        Array.prototype.slice.call(forms)
+            .forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+                    form.classList.add('was-validated')
+                }, false)
+            })
+    })()
+</script>
 {% endblock %}

@@ -7,8 +7,8 @@ class Pedido(models.Model):
     # Vincula o pedido ao usuário do sistema para controle de login e histórico
     usuario = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Usuário")
     
-    # Mantém o vínculo com Cliente para dados adicionais de cadastro
-    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE, verbose_name="Cliente")
+    # Mantém o vínculo com Cliente para dados adicionais de cadastro (opcional)
+    cliente = models.ForeignKey(Cliente, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Cliente")
     
     # Relação ManyToMany para permitir múltiplos itens no mesmo pedido
     produtos = models.ManyToManyField(Produto, verbose_name="Produtos")

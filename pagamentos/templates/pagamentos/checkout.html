@@ -1,0 +1,428 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Checkout - {{ pedido.id }} | Cantina{% endblock %}
+
+{% block content %}
+<div class="container py-5" data-aos="fade-up">
+    
+    <!-- Header e Steps -->
+    <div class="row mb-5">
+        <div class="col-12 text-center">
+            <h1 class="font-heading display-5 mb-4 gradient-text shimmer">Finalizar Pagamento</h1>
+            
+            <div class="d-flex justify-content-center align-items-center position-relative mx-auto" style="max-width: 600px;">
+                <div class="progress position-absolute w-100" style="height: 4px; z-index: 0; top: 50%; transform: translateY(-50%);">
+                    <div class="progress-bar bg-success" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                
+                <div class="d-flex justify-content-between w-100 position-relative z-1">
+                    <div class="d-flex flex-column align-items-center">
+                        <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center mb-2 shadow-sm" style="width: 40px; height: 40px;">
+                            <i class="bi bi-check-lg fs-5"></i>
+                        </div>
+                        <span class="small fw-bold text-success">Carrinho</span>
+                    </div>
+                    
+                    <div class="d-flex flex-column align-items-center">
+                        <div class="rounded-circle bg-accent text-white d-flex align-items-center justify-content-center mb-2 shadow-lg glow-accent" style="width: 40px; height: 40px;">
+                            <i class="bi bi-credit-card fs-5"></i>
+                        </div>
+                        <span class="small fw-bold text-accent">Pagamento</span>
+                    </div>
+                    
+                    <div class="d-flex flex-column align-items-center">
+                        <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center mb-2 shadow-sm" style="width: 40px; height: 40px;">
+                            <i class="bi bi-bag-check fs-5"></i>
+                        </div>
+                        <span class="small fw-bold text-secondary">Conclusão</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Aviso Simulação -->
+    <div class="row mb-4" data-aos="fade-up" data-aos-delay="100">
+        <div class="col-12">
+            <div class="card-glass border-0 bg-warning-subtle shadow-sm">
+                <div class="card-body p-4 d-flex align-items-center">
+                    <div class="fs-1 text-warning me-4">
+                        <i class="bi bi-exclamation-triangle-fill"></i>
+                    </div>
+                    <div>
+                        <span class="badge bg-warning text-dark mb-2">PROJETO PEDAGÓGICO</span>
+                        <h5 class="fw-bold mb-1">Ambiente de Simulação</h5>
+                        <p class="mb-0 text-muted">Esta é uma página de checkout simulada para fins educacionais. <strong>Nenhum valor real será cobrado</strong>. Sinta-se à vontade para usar dados fictícios.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Coluna Esquerda: Resumo do Pedido -->
+        <div class="col-lg-5 order-2 order-lg-1" data-aos="fade-right" data-aos-delay="200">
+            <div class="position-sticky" style="top: 100px;">
+                <div class="card-glass border-0 shadow-lg overflow-hidden">
+                    <div class="bg-dark text-white p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h5 class="mb-0 font-heading">Resumo do Pedido</h5>
+                            <span class="badge bg-accent px-3 py-2 fs-6">#{{ pedido.id }}</span>
+                        </div>
+                        <p class="mb-0 text-white-50 small">
+                            <i class="bi bi-person-fill me-1"></i> {{ pedido.cliente.nome|default:pedido.usuario.username }} &bull; 
+                            <i class="bi bi-calendar3 me-1"></i> {{ pedido.data_pedido|date:"d/m/Y H:i" }}
+                        </p>
+                    </div>
+                    
+                    <div class="card-body p-0">
+                        <div class="list-group list-group-flush" style="max-height: 350px; overflow-y: auto;">
+                            {% for item in produtos %}
+                            <div class="list-group-item bg-transparent p-4 d-flex align-items-center border-bottom border-light">
+                                <div class="rounded-3 overflow-hidden bg-light me-3 d-flex justify-content-center align-items-center shadow-sm" style="width: 60px; height: 60px;">
+                                    {% if item.produto.imagem %}
+                                        <img src="{{ item.produto.imagem.url }}" alt="{{ item.produto.nome }}" class="img-fluid w-100 h-100 object-fit-cover">
+                                    {% else %}
+                                        <i class="bi bi-box fs-3 text-secondary"></i>
+                                    {% endif %}
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-0 fw-bold">{{ item.produto.nome }}</h6>
+                                    <small class="text-muted">{{ item.quantidade }}x R$ {{ item.preco_unitario|floatformat:2 }}</small>
+                                </div>
+                                <div class="text-end fw-bold">
+                                    R$ {{ item.subtotal|floatformat:2 }}
+                                </div>
+                            </div>
+                            {% empty %}
+                            <div class="p-4 text-center text-muted">
+                                <p>Nenhum item encontrado neste pedido.</p>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    
+                    <div class="card-footer bg-transparent p-4 border-top border-light">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted">Subtotal</span>
+                            <span class="fw-bold">R$ {{ total_pedido|floatformat:2 }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-3 pb-3 border-bottom border-light">
+                            <span class="text-muted">Taxa de Entrega</span>
+                            <span class="text-success fw-bold">GRÁTIS</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="fs-5 fw-bold font-heading">Total</span>
+                            <span class="fs-2 fw-bold text-success gradient-text">R$ {{ total_pedido|floatformat:2 }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Coluna Direita: Métodos de Pagamento -->
+        <div class="col-lg-7 order-1 order-lg-2" data-aos="fade-left" data-aos-delay="300">
+            <div class="card-glass border-0 shadow-lg p-4 p-md-5 h-100">
+                <h4 class="font-heading mb-4 text-center">Como você prefere pagar?</h4>
+                
+                <!-- Navegação de Abas -->
+                <ul class="nav nav-pills nav-fill mb-5 gap-2" id="paymentTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active rounded-pill fw-bold" id="pix-tab" data-bs-toggle="tab" data-bs-target="#pix-tab-pane" type="button" role="tab" aria-controls="pix-tab-pane" aria-selected="true">
+                            <i class="bi bi-qr-code me-2"></i>Pix
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link rounded-pill fw-bold" id="card-tab" data-bs-toggle="tab" data-bs-target="#card-tab-pane" type="button" role="tab" aria-controls="card-tab-pane" aria-selected="false">
+                            <i class="bi bi-credit-card-2-front me-2"></i>Cartão
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link rounded-pill fw-bold" id="cash-tab" data-bs-toggle="tab" data-bs-target="#cash-tab-pane" type="button" role="tab" aria-controls="cash-tab-pane" aria-selected="false">
+                            <i class="bi bi-cash-coin me-2"></i>Balcão
+                        </button>
+                    </li>
+                </ul>
+
+                <!-- Conteúdo das Abas -->
+                <div class="tab-content" id="paymentTabContent">
+                    
+                    <!-- Aba PIX -->
+                    <div class="tab-pane fade show active" id="pix-tab-pane" role="tabpanel" aria-labelledby="pix-tab" tabindex="0">
+                        <div class="text-center p-4 bg-light rounded-4 border border-success-subtle mb-4 shadow-sm position-relative overflow-hidden">
+                            <!-- Background decoration -->
+                            <div class="position-absolute top-0 start-0 w-100 h-100 bg-success opacity-10" style="clip-path: circle(50% at 50% -20%); pointer-events: none;"></div>
+                            
+                            <h5 class="fw-bold mb-4"><i class="bi bi-lightning-charge-fill text-warning me-2"></i>Pagamento Instantâneo</h5>
+                            
+                            <div class="bg-white p-3 rounded-4 d-inline-block shadow-sm mb-4 floating">
+                                <svg width="200" height="200" viewBox="0 0 100 100">
+                                    <rect width="100" height="100" fill="#ffffff"/>
+                                    <!-- Finder patterns -->
+                                    <path d="M10,10 h20 v20 h-20 z m5,5 h10 v10 h-10 z" fill="#000000"/>
+                                    <path d="M70,10 h20 v20 h-20 z m5,5 h10 v10 h-10 z" fill="#000000"/>
+                                    <path d="M10,70 h20 v20 h-20 z m5,5 h10 v10 h-10 z" fill="#000000"/>
+                                    <!-- QR Data mockup -->
+                                    <rect x="40" y="10" width="10" height="10" fill="#000000"/>
+                                    <rect x="55" y="15" width="10" height="10" fill="#000000"/>
+                                    <rect x="10" y="40" width="15" height="15" fill="#000000"/>
+                                    <rect x="35" y="35" width="25" height="25" fill="#000000"/>
+                                    <rect x="70" y="40" width="20" height="10" fill="#000000"/>
+                                    <rect x="40" y="70" width="20" height="20" fill="#000000"/>
+                                    <rect x="75" y="75" width="15" height="15" fill="#000000"/>
+                                </svg>
+                            </div>
+                            
+                            <p class="text-muted small mb-3">Escaneie o código acima ou copie a chave Pix</p>
+                            
+                            <div class="input-group mb-0 w-75 mx-auto">
+                                <input type="text" class="form-control text-center font-monospace" id="pixCodeInput" value="00020126580014br.gov.bcb.pix0136{{ request.user.email|default:'simulado@cantina.com' }}5204000053039865802BR5915Cantina Escolar6009Sao Paulo62070503***6304SIMU" readonly>
+                                <button class="btn btn-outline-success" type="button" onclick="copyPixCode()" id="copyPixBtn">
+                                    <i class="bi bi-clipboard"></i> Copiar
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <form action="{% url 'checkout_pagamento' pedido.id %}" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="forma_pagamento" value="PIX">
+                            <button type="submit" class="btn btn-success w-100 py-3 rounded-pill fw-bold shadow-sm glow-accent">
+                                <i class="bi bi-check2-circle me-2"></i>Já realizei o pagamento Pix
+                            </button>
+                        </form>
+                    </div>
+                    
+                    <!-- Aba Cartão -->
+                    <div class="tab-pane fade" id="card-tab-pane" role="tabpanel" aria-labelledby="card-tab" tabindex="0">
+                        
+                        <!-- Visual Card Preview -->
+                        <div class="card text-white rounded-4 shadow-lg mb-4 mx-auto overflow-hidden position-relative" style="max-width: 400px; background: linear-gradient(135deg, #2b2b2b 0%, #1a1a1a 100%); border: 1px solid rgba(255,255,255,0.1);">
+                            <!-- Card Decoration -->
+                            <div class="position-absolute rounded-circle" style="width: 300px; height: 300px; background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(0,0,0,0) 70%); top: -100px; right: -100px;"></div>
+                            
+                            <div class="card-body p-4 position-relative z-1">
+                                <div class="d-flex justify-content-between align-items-center mb-4">
+                                    <i class="bi bi-sim text-warning fs-3 opacity-75"></i>
+                                    <i class="bi bi-wifi text-white-50 fs-4" style="transform: rotate(90deg);"></i>
+                                </div>
+                                
+                                <h4 class="font-monospace mb-4 tracking-wider" id="previewCardNumber" style="letter-spacing: 2px; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+                                    •••• •••• •••• ••••
+                                </h4>
+                                
+                                <div class="d-flex justify-content-between align-items-end">
+                                    <div>
+                                        <small class="text-white-50 text-uppercase" style="font-size: 0.65rem;">Titular do Cartão</small>
+                                        <div class="fw-bold text-uppercase text-truncate" id="previewCardName" style="max-width: 200px;">
+                                            NOME IMPRESSO
+                                        </div>
+                                    </div>
+                                    <div class="text-end">
+                                        <small class="text-white-50 text-uppercase" style="font-size: 0.65rem;">Validade</small>
+                                        <div class="fw-bold font-monospace" id="previewCardExpiry">MM/AA</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-end mb-3">
+                            <button type="button" class="btn btn-sm btn-outline-info rounded-pill" onclick="fillTestCard()">
+                                <i class="bi bi-magic me-1"></i> Preencher Dados de Teste
+                            </button>
+                        </div>
+
+                        <form action="{% url 'checkout_pagamento' pedido.id %}" method="POST" id="cardForm">
+                            {% csrf_token %}
+                            <input type="hidden" name="forma_pagamento" value="CARTAO_CREDITO" id="hiddenCardType">
+                            
+                            <div class="row g-3">
+                                <div class="col-12">
+                                    <label class="form-label small fw-bold">Tipo de Cartão</label>
+                                    <div class="btn-group w-100" role="group">
+                                        <input type="radio" class="btn-check" name="tipo_cartao" id="credito" value="CARTAO_CREDITO" checked onchange="document.getElementById('hiddenCardType').value=this.value;">
+                                        <label class="btn btn-outline-primary" for="credito">Crédito</label>
+
+                                        <input type="radio" class="btn-check" name="tipo_cartao" id="debito" value="CARTAO_DEBITO" onchange="document.getElementById('hiddenCardType').value=this.value;">
+                                        <label class="btn btn-outline-primary" for="debito">Débito</label>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-12">
+                                    <label for="numero_cartao" class="form-label small fw-bold">Número do Cartão</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light border-end-0"><i class="bi bi-credit-card-fill text-muted"></i></span>
+                                        <input type="text" class="form-control border-start-0 ps-0" id="numero_cartao" name="numero" placeholder="0000 0000 0000 0000" maxlength="19" oninput="updateCardPreview()">
+                                    </div>
+                                </div>
+                                
+                                <div class="col-12">
+                                    <label for="nome_cartao" class="form-label small fw-bold">Nome Impresso no Cartão</label>
+                                    <input type="text" class="form-control text-uppercase" id="nome_cartao" name="nome" placeholder="EX: MARIA S SILVA" oninput="updateCardPreview()">
+                                </div>
+                                
+                                <div class="col-6">
+                                    <label for="validade_cartao" class="form-label small fw-bold">Validade</label>
+                                    <input type="text" class="form-control" id="validade_cartao" name="validade" placeholder="MM/AA" maxlength="5" oninput="updateCardPreview()">
+                                </div>
+                                
+                                <div class="col-6">
+                                    <label for="cvv_cartao" class="form-label small fw-bold">CVV <i class="bi bi-question-circle text-muted ms-1" data-bs-toggle="tooltip" title="3 dígitos no verso"></i></label>
+                                    <input type="password" class="form-control" id="cvv_cartao" name="cvv" placeholder="123" maxlength="4">
+                                </div>
+                                
+                                <div class="col-12">
+                                    <label for="parcelas" class="form-label small fw-bold">Parcelamento (Simulação)</label>
+                                    <select class="form-select" id="parcelas" name="parcelas">
+                                        <option value="1">1x de R$ {{ total_pedido|floatformat:2 }} (Sem Juros)</option>
+                                        <option value="2">2x de R$ {{ total_pedido|floatformat:2 }} (Simulação)</option>
+                                        <option value="3">3x de R$ {{ total_pedido|floatformat:2 }} (Simulação)</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="col-12 mt-4">
+                                    <button type="submit" class="btn btn-primary w-100 py-3 rounded-pill fw-bold shadow-sm glow-accent">
+                                        <i class="bi bi-lock-fill me-2"></i>Pagar R$ {{ total_pedido|floatformat:2 }}
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <!-- Aba Balcão/Dinheiro -->
+                    <div class="tab-pane fade" id="cash-tab-pane" role="tabpanel" aria-labelledby="cash-tab" tabindex="0">
+                        <div class="text-center mb-5">
+                            <div class="display-1 text-warning mb-3 floating">
+                                <i class="bi bi-cash-coin"></i>
+                            </div>
+                            <h5 class="fw-bold">Pagamento na Retirada</h5>
+                            <p class="text-muted">Você pagará no caixa da cantina ao retirar seu pedido.</p>
+                        </div>
+                        
+                        <form action="{% url 'checkout_pagamento' pedido.id %}" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="forma_pagamento" value="DINHEIRO">
+                            
+                            <div class="bg-light p-4 rounded-4 border mb-4">
+                                <div class="form-check form-switch mb-3">
+                                    <input class="form-check-input" type="checkbox" role="switch" id="precisaTroco" onchange="toggleTrocoInput()">
+                                    <label class="form-check-label fw-bold" for="precisaTroco">Vou precisar de troco</label>
+                                </div>
+                                
+                                <div class="mb-3 d-none" id="trocoContainer">
+                                    <label for="trocoPara" class="form-label small">Troco para quanto?</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">R$</span>
+                                        <input type="number" class="form-control" id="trocoPara" name="troco_para" placeholder="Ex: 50.00" min="{{ total_pedido|stringformat:'f' }}" step="0.01">
+                                    </div>
+                                    <div class="form-text">Total do pedido: R$ {{ total_pedido|floatformat:2 }}</div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="observacoes" class="form-label small fw-bold">Observações (Opcional)</label>
+                                <textarea class="form-control" id="observacoes" name="observacoes" rows="2" placeholder="Ex: Retiro no intervalo das 10h"></textarea>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-warning text-dark w-100 py-3 rounded-pill fw-bold shadow-sm glow-accent">
+                                <i class="bi bi-shop me-2"></i>Confirmar Pedido (Pagar no Local)
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Inicializar tooltips
+    document.addEventListener('DOMContentLoaded', function () {
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        });
+    });
+
+    // Funções JS
+    function copyPixCode() {
+        const pixInput = document.getElementById('pixCodeInput');
+        pixInput.select();
+        pixInput.setSelectionRange(0, 99999);
+        navigator.clipboard.writeText(pixInput.value).then(() => {
+            const btn = document.getElementById('copyPixBtn');
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = '<i class="bi bi-check-lg"></i> Copiado!';
+            btn.classList.replace('btn-outline-success', 'btn-success');
+            setTimeout(() => {
+                btn.innerHTML = originalHTML;
+                btn.classList.replace('btn-success', 'btn-outline-success');
+            }, 2000);
+        });
+    }
+
+    function formatCardNumber(value) {
+        return value.replace(/\s+/g, '').replace(/[^0-9]/gi, '').replace(/(.{4})/g, '$1 ').trim();
+    }
+    
+    function formatExpiry(value) {
+        let val = value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+        if (val.length >= 2) {
+            return val.substring(0, 2) + '/' + val.substring(2, 4);
+        }
+        return val;
+    }
+
+    // Máscaras inputs
+    document.getElementById('numero_cartao').addEventListener('input', function(e) {
+        this.value = formatCardNumber(this.value);
+    });
+    
+    document.getElementById('validade_cartao').addEventListener('input', function(e) {
+        this.value = formatExpiry(this.value);
+    });
+
+    function updateCardPreview() {
+        const num = document.getElementById('numero_cartao').value;
+        const name = document.getElementById('nome_cartao').value;
+        const exp = document.getElementById('validade_cartao').value;
+        
+        document.getElementById('previewCardNumber').textContent = num || '•••• •••• •••• ••••';
+        document.getElementById('previewCardName').textContent = name || 'NOME IMPRESSO';
+        document.getElementById('previewCardExpiry').textContent = exp || 'MM/AA';
+    }
+
+    function fillTestCard() {
+        document.getElementById('numero_cartao').value = '4111 1111 1111 1111';
+        document.getElementById('nome_cartao').value = '{{ request.user.get_full_name|default:request.user.username|upper }}';
+        document.getElementById('validade_cartao').value = '12/28';
+        document.getElementById('cvv_cartao').value = '123';
+        updateCardPreview();
+        
+        // Efeito visual no cartão para indicar preenchimento
+        const cardPreview = document.querySelector('#card-tab-pane .card');
+        cardPreview.classList.add('shadow-lg', 'border-info');
+        setTimeout(() => {
+            cardPreview.classList.remove('border-info');
+        }, 1000);
+    }
+
+    function toggleTrocoInput() {
+        const checkbox = document.getElementById('precisaTroco');
+        const container = document.getElementById('trocoContainer');
+        const input = document.getElementById('trocoPara');
+        
+        if (checkbox.checked) {
+            container.classList.remove('d-none');
+            input.setAttribute('required', 'required');
+        } else {
+            container.classList.add('d-none');
+            input.removeAttribute('required');
+            input.value = '';
+        }
+    }
+</script>
+{% endblock %}
