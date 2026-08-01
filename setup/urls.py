@@ -19,5 +19,6 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls), # Essa página já existe no Django
-    path('', include('calculadora.urls')), # Incluímos o novo app
+    path('calculadora/', include('calculadora.urls')), # Incluímos o novo app
+    path('contstr/', include('ContStr.urls')), # Incluímos o novo app
 ]
