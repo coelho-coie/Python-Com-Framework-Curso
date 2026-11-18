@@ -1,3 +1,26 @@
+<h1 align="center">🐍 Python com Framework — Curso</h1>
+
+<p align="center">
+  Projetos e exercícios do curso de Python e Django, no <b>SENAI Sertãozinho</b>.<br>
+  <sub>Cada projeto vive em uma branch própria.</sub>
+</p>
+
+<p align="center">
+  <img alt="Python" src="https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white">
+  <img alt="Django" src="https://img.shields.io/badge/Django-092E20?style=flat&logo=django&logoColor=white">
+  <img alt="Curso" src="https://img.shields.io/badge/Curso-conclu%C3%ADdo-brightgreen?style=flat">
+</p>
+
+| Branch | Projeto |
+|---|---|
+| [`master`](https://github.com/coelho-coie/Python-Com-Framework-Curso/tree/master) | 🍔 Cantina Digital — gestão de pedidos, cardápio e pagamentos (projeto final, abaixo) |
+| [`Calc`](https://github.com/coelho-coie/Python-Com-Framework-Curso/tree/Calc) | 🧮 Calculadora de IMC |
+| [`ContStr`](https://github.com/coelho-coie/Python-Com-Framework-Curso/tree/ContStr) | 🔤 Contador de caracteres e palavras |
+| [`CalcContStr`](https://github.com/coelho-coie/Python-Com-Framework-Curso/tree/CalcContStr) | 🧩 Calculadora + contador no mesmo projeto |
+| [`Exercicios-py`](https://github.com/coelho-coie/Python-Com-Framework-Curso/tree/Exercicios-py) | 📚 Exercícios de Python, Dia 01 a Dia 07 |
+
+---
+
 # 🍔 Cantina Digital - Sistema de Gestão de Pedidos
 
 Um sistema web completo e moderno para gerenciamento de cantinas, desenvolvido em **Django**. O projeto permite a visualização de cardápios interativos, cadastro de clientes, gestão de produtos e fluxo completo de carrinho de compras e pedidos.
